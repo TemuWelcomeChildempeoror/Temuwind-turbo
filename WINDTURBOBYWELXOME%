@@ -1,0 +1,284 @@
+local CharacterName = "Wind Turbo"
+local CharacterIcon = 129920484317744
+local function Script()local Animation = 12467789963
+local StartTime = 0 -- what duration it starts like video
+local Speed = 1 -- animation speed
+local Duration= 8 -- how much till the animation stops
+
+local a = Instance.new("Animation")
+a.AnimationId = "rbxassetid://" .. Animation
+local p = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(a)
+p:Play()
+p.TimePosition = StartTime -- what duration it starts like video
+p:AdjustSpeed(1)
+delay(Duration, function() -- delete these 3 lines if you don't want to stop it or you can adjust 7 to less or longer to stop animation 
+p:Stop()
+end)
+
+for _, tools in ipairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+if tools:IsA("Tool") then
+tools:Destroy()
+end
+end
+
+local ToolName = "Wind Turbine"
+local Animation = 16734584478
+
+local t = Instance.new("Tool")
+t.Name = ToolName
+t.RequiresHandle = false
+t.CanBeDropped = false
+t.Parent = game.Players.LocalPlayer.Backpack
+t.Activated:Connect(function()local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://5799870105"
+sound.Volume = 10
+sound.Parent = workspace
+sound:Play()
+local wow1 = game.ReplicatedStorage.Resources.Dragon["Complete"].Part.Debri:Clone()
+wow1.Parent = game.Players.LocalPlayer.Character["Torso"]
+    for _, child in ipairs(wow1:GetChildren()) do
+        if child:IsA("ParticleEmitter") then -- Check if the child is a ParticleEmitter
+            child:Emit(20) -- Emit 20 particles
+        end
+    end
+local wow1 = game.ReplicatedStorage.Resources.Dragon["Complete"].Part.Debri:Clone()
+wow1.Parent = game.Players.LocalPlayer.Character["Torso"]
+    for _, child in ipairs(wow1:GetChildren()) do
+        if child:IsA("ParticleEmitter") then -- Check if the child is a ParticleEmitter
+            child:Emit(20) -- Emit 20 particles
+        end
+    end
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local camera = workspace.CurrentCamera
+
+local speed = 0.6 -- How fast the health reduces (seconds between each health reduction)
+local duration = 2 -- Total time to keep reducing health (in seconds)
+local damageAmount = 3.7 -- The amount of health to reduce on each hit
+
+
+local function updateHealthText(dummyHumanoid)
+    local billboardGui = dummyHumanoid.Parent:FindFirstChild("Head"):FindFirstChild("BillboardGui")
+    if billboardGui then
+        local textLabel = billboardGui:FindFirstChild("TextLabel")
+        if textLabel then
+            local currentHealth = dummyHumanoid.Health
+            local maxHealth = dummyHumanoid.MaxHealth
+            local healthPercentage = math.floor((currentHealth / maxHealth) * 89)
+            textLabel.Text = healthPercentage .. "%"
+            textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+        end
+    end
+end
+local function revertTextColor(dummyHumanoid)
+    local billboardGui = dummyHumanoid.Parent:FindFirstChild("Head"):FindFirstChild("BillboardGui")
+    if billboardGui then
+        local textLabel = billboardGui:FindFirstChild("TextLabel")
+        if textLabel then
+            textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        end
+    end
+end
+local function resetHealthIfZero(dummyHumanoid)
+    if dummyHumanoid.Health <= 0 then
+        dummyHumanoid.Health = dummyHumanoid.MaxHealth
+        updateHealthText(dummyHumanoid)
+    end
+end
+local function checkForNearbyCharacters()
+    for _, targetCharacter in pairs(workspace.Live:GetChildren()) do
+        if targetCharacter:IsA("Model") and targetCharacter:FindFirstChild("Humanoid") then
+            local targetHumanoid = targetCharacter:FindFirstChild("Humanoid")
+            local distance = (targetCharacter.HumanoidRootPart.Position - character.HumanoidRootPart.Position).magnitude
+            if targetCharacter ~= character and distance <= 10 then
+                targetHumanoid.Health = math.max(0, targetHumanoid.Health - damageAmount)
+                if targetHumanoid.Health == 0 then
+                     targetHumanoid.Health = targetHumanoid.MaxHealth
+                end
+                if targetCharacter.Name == "Weakest Dummy" then
+                    updateHealthText(targetHumanoid)
+                    resetHealthIfZero(targetHumanoid)
+                end
+            end
+        end
+    end
+end
+local function Damage()
+    local startTime = tick()
+    while tick() - startTime < duration do
+        checkForNearbyCharacters()
+        wait(speed)
+    end
+    for _, targetCharacter in pairs(workspace.Live:GetChildren()) do
+        if targetCharacter:IsA("Model") and targetCharacter.Name == "Weakest Dummy" and targetCharacter:FindFirstChild("Humanoid") then
+            local targetHumanoid = targetCharacter:FindFirstChild("Humanoid")
+            revertTextColor(targetHumanoid)
+        end
+    end
+end
+Damage()
+local a = Instance.new("Animation")
+a.AnimationId = "rbxassetid://" .. Animation
+local p = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(a)
+p:Play()
+end)
+
+local UltBarName = "?"
+
+-- don't change anything here
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local function findGuiAndSetText()
+    local screenGui = playerGui:FindFirstChild("ScreenGui")
+    if screenGui then
+        local magicHealthFrame = screenGui:FindFirstChild("MagicHealth")
+        if magicHealthFrame then
+            local textLabel = magicHealthFrame:FindFirstChild("TextLabel")
+            if textLabel then
+                textLabel.Text = UltBarName
+            end
+        end
+    end
+end
+
+playerGui.DescendantAdded:Connect(function(descendant)
+    if descendant:IsDescendantOf(playerGui:FindFirstChild("ScreenGui")) then
+        findGuiAndSetText()
+    end
+end)
+
+findGuiAndSetText()
+end
+
+
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local topbarPlus = playerGui:WaitForChild("TopbarPlus")
+local topbarContainer = topbarPlus:WaitForChild("TopbarContainer")
+local unnamedIcon = topbarContainer:WaitForChild("UnnamedIcon")
+local dropdownContainer = unnamedIcon:WaitForChild("DropdownContainer")
+local dropdownFrame = dropdownContainer:WaitForChild("DropdownFrame")
+
+local charFrame = Instance.new("Frame")
+charFrame.Name = "Char"
+charFrame.Parent = dropdownFrame
+charFrame.BackgroundTransparency = 1
+charFrame.BorderColor3 = Color3.fromRGB(27, 42, 53)
+charFrame.BorderSizePixel = 1
+charFrame.LayoutOrder = 14
+charFrame.Size = UDim2.new(1, 0, 0, 32)
+charFrame.SizeConstraint = Enum.SizeConstraint.RelativeXY
+charFrame.ZIndex = 1
+
+local iconButton = Instance.new("TextButton")
+iconButton.Name = "IconButton"
+iconButton.Parent = charFrame
+iconButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+iconButton.BackgroundTransparency = 0.5
+iconButton.BorderSizePixel = 0
+iconButton.Text = ""
+iconButton.TextScaled = false
+iconButton.TextSize = 8
+iconButton.TextTransparency = 1
+iconButton.TextWrapped = false
+iconButton.Position = UDim2.new(0, 0, 0, 0)
+iconButton.Size = UDim2.new(1, 0, 1, 0)
+iconButton.SizeConstraint = Enum.SizeConstraint.RelativeXY
+iconButton.Font = Enum.Font.Legacy
+iconButton.LayoutOrder = 0
+
+local iconImage = Instance.new("ImageLabel")
+iconImage.Name = "IconImage"
+iconImage.Parent = iconButton
+iconImage.AnchorPoint = Vector2.new(0, 0.5)
+iconImage.BackgroundTransparency = 1
+iconImage.BorderColor3 = Color3.fromRGB(27, 42, 53)
+iconImage.BorderSizePixel = 1
+iconImage.Image = "rbxassetid://" .. CharacterIcon
+iconImage.ImageColor3 = Color3.fromRGB(255, 255, 255)
+iconImage.ImageRectOffset = Vector2.new(0, 0)
+iconImage.ImageRectSize = Vector2.new(0, 0)
+iconImage.ImageTransparency = 0
+iconImage.LayoutOrder = 0
+iconImage.Position = UDim2.new(0, 12, 0, 15)
+iconImage.Size = UDim2.new(0, 24, 0, 24)
+iconImage.SizeConstraint = Enum.SizeConstraint.RelativeXY
+iconImage.TileSize = UDim2.new(1, 0, 1, 0)
+iconImage.SliceScale = 1
+iconImage.ZIndex = 11
+
+local iconLabel = Instance.new("TextLabel")
+iconLabel.Name = "IconLabel"
+iconLabel.Parent = iconButton
+iconLabel.AnchorPoint = Vector2.new(0, 0.5)
+iconLabel.BackgroundTransparency = 1
+iconLabel.BorderColor3 = Color3.fromRGB(27, 42, 53)
+iconLabel.BorderSizePixel = 1
+iconLabel.Font = Enum.Font.GothamMedium
+iconLabel.LayoutOrder = 0
+iconLabel.Text = CharacterName
+iconLabel.TextColor3 = Color3.fromRGB(255, 216, 19)
+iconLabel.TextSize = 14
+iconLabel.TextScaled = false
+iconLabel.TextTransparency = 0
+iconLabel.TextWrapped = false
+iconLabel.TextXAlignment = Enum.TextXAlignment.Left
+iconLabel.TextYAlignment = Enum.TextYAlignment.Center
+iconLabel.Position = UDim2.new(0, 44, 0, 15)
+iconLabel.Size = UDim2.new(1, -56, 0, 7)
+iconLabel.TextStrokeTransparency = 1
+iconLabel.ZIndex = 11
+
+local function onErrorNotification()
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "NOTIFICATION";
+        Text = "YOU'RE ALREADY PLAYING AS THIS CHARACTER.";
+        Icon = "";
+        Duration = 5;
+    })
+end
+
+local function handleIconButtonClick()
+    Script()
+    local character = player.Character
+    if not character then
+        return
+    end
+
+    local scriptHasRun = character:FindFirstChild("ScriptHasRun")
+    if scriptHasRun and scriptHasRun.Value then
+        onErrorNotification()
+        return
+    end
+
+    if not scriptHasRun then
+        scriptHasRun = Instance.new("BoolValue")
+        scriptHasRun.Name = "ScriptHasRun"
+        scriptHasRun.Value = true
+        scriptHasRun.Parent = character
+    else
+        scriptHasRun.Value = true
+    end
+end
+
+iconButton.MouseButton1Click:Connect(handleIconButtonClick)
+
+print("Script Loaded 0 cap")  -- Debug print to confirm script initialization
+
+player.CharacterAdded:Connect(function(character)
+    local scriptHasRun = character:FindFirstChild("ScriptHasRun")
+    if scriptHasRun then
+        scriptHasRun.Value = false
+    end
+end)
+
+if player.Character then
+    local scriptHasRun = player.Character:FindFirstChild("ScriptHasRun")
+    if scriptHasRun then
+        scriptHasRun.Value = false
+    end
+end
